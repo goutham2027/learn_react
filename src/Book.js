@@ -48,14 +48,14 @@ class Book extends React.Component {
                 <h3> Author: {this.props.author} </h3>
                 <p>{this.state.count - this.state.borrowed_count}</p>
                 {this.canBorrow() ? (
-                    <button onClick={this.handleBorrow} isbn={this.props.isbn}> Borrow</button>
+                    <button className="btn-primary" onClick={this.handleBorrow} isbn={this.props.isbn}> Borrow</button>
                 )
                     :
                     <p></p>
                 }
 
                 {this.canReturn() ? (
-                    <button onClick={this.handleReturn} isbn={this.props.isbn}> Return </button>
+                    <button className="btn-primary" onClick={this.handleReturn} isbn={this.props.isbn}> Return </button>
                 )
                 :
                         <p></p>

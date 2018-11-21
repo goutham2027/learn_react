@@ -9,8 +9,8 @@ class App extends React.Component {
 
     render() {
         return (
-            <div>
-                <h1> Welcome to BeautifulCode Library </h1>
+            <div className="col-xs-12">
+                <h1 className="text-center text-primary"> Welcome to Beautiful Library </h1>
                 <Books />
             </div>
         )

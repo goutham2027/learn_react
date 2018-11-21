@@ -19,9 +19,11 @@ class Books extends React.Component {
         }
         this.handleNewBook = this.handleNewBook.bind(this);
         this.handleInputChange = this.handleInputChange.bind(this);
+        this.canSubmit = this.canSubmit.bind(this);
     }
 
     get_default_books() {
+        return []
         return [
             {
                 'title': 'Who will cry when you Die',
@@ -36,6 +38,10 @@ class Books extends React.Component {
         ]
     }
 
+    canSubmit() {
+        return this.state.title.length > 0 && this.state.author.length > 0 && this.state.copies > 0
+    }
+
     handleNewBook(event) {
         event.preventDefault()
         let newBook = {
@@ -43,9 +49,13 @@ class Books extends React.Component {
             'author': this.state.author,
             'count': this.state.copies
         }
-        this.setState(prevState => ({
-            'books': [...prevState.books, newBook]
-        }))
+
+        if (this.canSubmit()) {
+            this.setState(prevState => ({
+                'books': [...prevState.books, newBook]
+            }))
+            this.setState({'title': '', 'author': '', 'count': 1})
+        }
     }
 
     handleInputChange(event) {
@@ -59,13 +69,18 @@ class Books extends React.Component {
             books.push(<Book key={index} title={book.title} author={book.author} count={book.count} />)
         })
         return (
-        <div>
+        <div className="col-xs-12">
             <NewBookForm handleOnSubmit={this.handleNewBook}
             title={this.state.title}
             author={this.state.author}
             copies={this.state.copies}
-            handleInputChange={this.handleInputChange} />
-            <h2> All Books </h2>
+            handleInputChange={this.handleInputChange}
+            canSubmit={this.canSubmit} />
+                {this.state.books.length > 0 ?
+                    <h2 className="text-success"> All Books </h2>
+                    :
+                    <h2 className="text-danger"> No Books present.</h2>
+                }
             {books}
         </div>
         );

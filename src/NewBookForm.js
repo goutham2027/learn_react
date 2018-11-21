@@ -1,49 +1,47 @@
 import React from 'react';
+import { Row, Form, FormGroup, Button, Jumbotron, FormControl, ControlLabel } from 'react-bootstrap';
 
 class NewBookForm extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {title: '', author: '', copies: 1};
-
-        this.handleOnSubmit = this.handleOnSubmit.bind(this);
-        this.handleInputChange = this.handleInputChange.bind(this);
-    }
-
-    handleOnSubmit(event) {
-        event.preventDefault();
-        console.log(this.state)
-    }
-
-    handleInputChange(event) {
-        const target = event.target;
-        this.setState({[target.name]: target.value});
     }
 
     render() {
-        const {handleOnSubmit, handleInputChange, author, title, copies} = this.props
+        const {handleOnSubmit, handleInputChange, canSubmit, author, title, copies} = this.props
         return (
-            // <form onSubmit={this.handleOnSubmit}>
-            <form onSubmit={handleOnSubmit}>
-                <div>
-                    <label htmlFor="title">Title
-                        <input type="text" name="title" value={title} onChange={handleInputChange}/>
-                    </label>
-                </div>
+            <Jumbotron>
+                <Form onSubmit={handleOnSubmit}>
+                    <FormGroup>
+                        <div className="col-xs-12">
+                            <ControlLabel htmlFor="title" className="col-xs-3 text-right">Title</ControlLabel>
+                            <div className="col-xs-3">
+                                <FormControl type="text" name="title" value={title} onChange={handleInputChange} />
+                            </div>
+                        </div>
 
-                <div>
-                    <label htmlFor="author">Author
-                        <input type="text" name="author" value={author} onChange={handleInputChange}/>
-                    </label>
-                </div>
+                        <div className="col-xs-12">
+                            <ControlLabel htmlFor="author" className="col-xs-3 text-right">Author</ControlLabel>
+                            <div className="col-xs-3">
+                                <FormControl type="text" name="author" value={author} onChange={handleInputChange} />
+                            </div>
+                        </div>
 
-                <div>
-                    <label htmlFor="num_of_copies">Number of copies
-                        <input type="text" name="copies" value={copies} onChange={handleInputChange}/>
-                    </label>
-                </div>
+                        <div className="col-xs-12">
+                            <ControlLabel htmlFor="num_of_copies" className="col-xs-3 text-right">Number of copies</ControlLabel>
+                            <div className="col-xs-3">
+                                <FormControl type="text" name="copies" value={copies} onChange={handleInputChange} />
+                            </div>
+                        </div>
 
-                <button type="Submit">Add Book</button>
-            </form>
+                        {canSubmit() ?
+                            <Button bsStyle="primary" type="submit">Add Book</Button>
+                            :
+                            <Button bsStyle="primary" type="submit" disabled>Add Book</Button>
+                        }
+                </FormGroup>
+                </Form>
+            </Jumbotron>
+
         )
     }
 
