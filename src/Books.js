@@ -81,7 +81,20 @@ class Books extends React.Component {
                     :
                     <h2 className="text-danger"> No Books present.</h2>
                 }
-            {books}
+            <table className="table table-bordered table-striped">
+                <thead className="thead-dark">
+                    <tr>
+                        <th>Title</th>
+                        <th>Author</th>
+                        <th>Avaialable Count</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {books}
+                </tbody>
+            </table>
         </div>
         );
     }
