@@ -59,7 +59,7 @@ class Book extends React.Component {
                         :
                         <p></p>
                     }
-                    <button className="btn-primary">Edit</button>
+                    <button className="btn-primary" onClick={this.props.toggleEdit}>Edit</button>
                 </td>
             </tr>
         );

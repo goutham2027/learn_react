@@ -1,6 +1,7 @@
 import React from 'react';
 import Book from "./Book";
 import NewBookForm from './NewBookForm';
+import EditBookModal from './EditBookModal';
 
 class Books extends React.Component {
 
@@ -16,10 +17,13 @@ class Books extends React.Component {
             'title': '',
             'author': '',
             'copies': 1,
+            'showEditModal': false
         }
         this.handleNewBook = this.handleNewBook.bind(this);
         this.handleInputChange = this.handleInputChange.bind(this);
         this.canSubmit = this.canSubmit.bind(this);
+        this.toggleEdit = this.toggleEdit.bind(this);
+        this.handleEditModalClose = this.handleEditModalClose.bind(this);
     }
 
     get_default_books() {
@@ -58,16 +62,37 @@ class Books extends React.Component {
         }
     }
 
+    handleEdit(event) {
+        event.preventDefault();
+        // get event details and load modal
+        // onSave of the modal update the book details
+    }
+
     handleInputChange(event) {
         const target = event.target;
         this.setState({[target.name]: target.value});
     }
 
+    toggleEdit(event) {
+        event.preventDefault();
+        this.setState({'showEditModal': !this.state.showEditModal});
+    }
+
+    handleEditModalClose(event) {
+        event.preventDefault();
+        this.setState({'showEditModal': false})
+    }
+
     render() {
         let books = []
         this.state.books.forEach(function(book, index) {
-            books.push(<Book key={index} title={book.title} author={book.author} count={book.count} />)
-        })
+            books.push(<Book
+                key={index}
+                title={book.title}
+                author={book.author}
+                count={book.count}
+                toggleEdit={this.toggleEdit} />)
+        }, this)
         return (
         <div className="col-xs-12">
             <NewBookForm handleOnSubmit={this.handleNewBook}
@@ -95,6 +120,9 @@ class Books extends React.Component {
                     {books}
                 </tbody>
             </table>
+            <EditBookModal
+             show={this.state.showEditModal}
+             handleOnClose={this.handleEditModalClose}/>
         </div>
         );
     }
