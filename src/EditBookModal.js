@@ -8,7 +8,8 @@ class EditBookModal extends React.Component {
 
     render() {
         // const { handleOnSubmit, handleInputChange, canSubmit, author, title, copies } = this.props
-        if (!this.props.show) {
+        const { show, handleOnClose, handleOnSubmit, handleInputChange, title, author, copies, canSubmit } = this.props;
+        if (!show) {
             return null;
         }
         return (
@@ -18,44 +19,43 @@ class EditBookModal extends React.Component {
                         <Modal.Title>Edit Book</Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
-                        <p>Form goes here</p>
+                        <Form onSubmit={handleOnSubmit}>
+                            <FormGroup>
+                                <div className="col-xs-12">
+                                    <ControlLabel htmlFor="title" className="col-xs-3 text-right">Title</ControlLabel>
+                                    <div className="col-xs-3">
+                                        <FormControl type="text" name="edit_title" value={title} onChange={handleInputChange} />
+                                    </div>
+                                </div>
+
+                                <div className="col-xs-12">
+                                    <ControlLabel htmlFor="author" className="col-xs-3 text-right">Author</ControlLabel>
+                                    <div className="col-xs-3">
+                                        <FormControl type="text" name="edit_author" value={author} onChange={handleInputChange} />
+                                    </div>
+                                </div>
+
+                                <div className="col-xs-12">
+                                    <ControlLabel htmlFor="num_of_copies" className="col-xs-3 text-right">Number of copies</ControlLabel>
+                                    <div className="col-xs-3">
+                                        <FormControl type="text" name="edit_copies" value={copies} onChange={handleInputChange} />
+                                    </div>
+                                </div>
+
+                                {canSubmit() ?
+                                    <Button bsStyle="primary" type="submit">Update Book</Button>
+                                    :
+                                    <Button bsStyle="primary" type="submit" disabled>Update Book</Button>
+                                }
+                            </FormGroup>
+                        </Form>
                     </Modal.Body>
                     <Modal.Footer>
-                        <Button onClick={this.props.handleOnClose}>Close</Button>
+                        <Button onClick={handleOnClose}>Close</Button>
                         <Button bsStyle="primary">Update Book</Button>
                     </Modal.Footer>
                 </Modal.Dialog>
             </div>
-            // <Form onSubmit={handleOnSubmit}>
-            //     <FormGroup>
-            //         <div className="col-xs-12">
-            //             <ControlLabel htmlFor="title" className="col-xs-3 text-right">Title</ControlLabel>
-            //             <div className="col-xs-3">
-            //                 <FormControl type="text" name="title" value={title} onChange={handleInputChange} />
-            //             </div>
-            //         </div>
-
-            //         <div className="col-xs-12">
-            //             <ControlLabel htmlFor="author" className="col-xs-3 text-right">Author</ControlLabel>
-            //             <div className="col-xs-3">
-            //                 <FormControl type="text" name="author" value={author} onChange={handleInputChange} />
-            //             </div>
-            //         </div>
-
-            //         <div className="col-xs-12">
-            //             <ControlLabel htmlFor="num_of_copies" className="col-xs-3 text-right">Number of copies</ControlLabel>
-            //             <div className="col-xs-3">
-            //                 <FormControl type="text" name="copies" value={copies} onChange={handleInputChange} />
-            //             </div>
-            //         </div>
-
-            //         {canSubmit() ?
-            //             <Button bsStyle="primary" type="submit">Update Book</Button>
-            //             :
-            //             <Button bsStyle="primary" type="submit" disabled>Update Book</Button>
-            //         }
-            //     </FormGroup>
-            // </Form>
 
         )
     }

@@ -42,24 +42,25 @@ class Book extends React.Component {
     }
 
     render() {
+        const {title, author, isbn, index} = this.props;
         return (
             <tr>
-                <td>{this.props.title}</td>
-                <td>{this.props.author}</td>
+                <td>{title}</td>
+                <td>{author}</td>
                 <td>{this.state.count - this.state.borrowed_count}</td>
                 <td>{this.canBorrow() ? (
-                    <button className="btn-primary" onClick={this.handleBorrow} isbn={this.props.isbn}> Borrow</button>
+                    <button className="btn-primary" onClick={this.handleBorrow} isbn={isbn}> Borrow</button>
                 )
                     :
                     <p></p>
                 }
                     {this.canReturn() ? (
-                        <button className="btn-primary" onClick={this.handleReturn} isbn={this.props.isbn}> Return </button>
+                        <button className="btn-primary" onClick={this.handleReturn} isbn={isbn}> Return </button>
                     )
                         :
                         <p></p>
                     }
-                    <button className="btn-primary" onClick={this.props.toggleEdit}>Edit</button>
+                    <button className="btn-primary" index={index} onClick={this.props.toggleEdit}>Edit</button>
                 </td>
             </tr>
         );

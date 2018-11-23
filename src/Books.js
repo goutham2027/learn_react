@@ -17,6 +17,10 @@ class Books extends React.Component {
             'title': '',
             'author': '',
             'copies': 1,
+            'edit_title': '',
+            'edit_author': '',
+            'edit_copies': 1,
+            'edit_index': undefined,
             'showEditModal': false
         }
         this.handleNewBook = this.handleNewBook.bind(this);
@@ -75,12 +79,27 @@ class Books extends React.Component {
 
     toggleEdit(event) {
         event.preventDefault();
+        let book, index;
+        index = event.target.getAttribute('index');
+
         this.setState({'showEditModal': !this.state.showEditModal});
+        book = this.state.books[index]
+
+        this.setState({'edit_index': index})
+        this.setState({'edit_title': book['title']});
+        this.setState({'edit_author': book['author']});
+        this.setState({'edit_copies': book['count']});
     }
 
     handleEditModalClose(event) {
         event.preventDefault();
         this.setState({'showEditModal': false})
+
+        // reset edit values in state
+        this.setState({'edit_index': undefined})
+        this.setState({'edit_title': ''});
+        this.setState({'edit_author': ''});
+        this.setState({'edit_copies': ''});
     }
 
     render() {
@@ -91,7 +110,8 @@ class Books extends React.Component {
                 title={book.title}
                 author={book.author}
                 count={book.count}
-                toggleEdit={this.toggleEdit} />)
+                toggleEdit={this.toggleEdit}
+                index={index} />)
         }, this)
         return (
         <div className="col-xs-12">
@@ -120,9 +140,19 @@ class Books extends React.Component {
                     {books}
                 </tbody>
             </table>
+            {this.state.showEditModal ?
             <EditBookModal
              show={this.state.showEditModal}
-             handleOnClose={this.handleEditModalClose}/>
+             handleOnClose={this.handleEditModalClose}
+             handleOnSubmit={this.handleEdit}
+             handleInputChange={this.handleInputChange}
+             canSubmit={this.canSubmit}
+             title={this.state.edit_title}
+             author={this.state.edit_author}
+             copies={this.state.edit_copies} />
+            :
+            <p></p>
+            }
         </div>
         );
     }
