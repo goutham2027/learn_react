@@ -10,5 +10,6 @@
 | Add new Book (book: title, author, count) | Done |
 | Borrow or return books | Done |
 | Show books in a table | Done |
-| Edit a book | Started |
-| Delete a book | Not started|
+| Edit a book | Done |
+| Delete a book | Done|
+| Show a confirmation box before delete | Not Started|

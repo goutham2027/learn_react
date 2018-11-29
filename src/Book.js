@@ -59,8 +59,8 @@ class Book extends React.Component {
                         <p></p>
                     }
                     <button className="btn-primary" index={index} onClick={this.props.toggleEdit}>Edit</button>
-                    <br/>
-                    <button className="btn-primary">Delete</button>
+                    <p></p>
+                    <button className="btn-primary" index={index} onClick={this.props.handleDelete}>Delete</button>
                 </td>
             </tr>
         );

@@ -42,6 +42,7 @@ class EditBookModal extends React.Component {
                                     </div>
                                 </div>
 
+                                <Button onClick={handleOnClose}>Close</Button>
                                 {canSubmit() ?
                                     <Button bsStyle="primary" type="submit">Update Book</Button>
                                     :
@@ -50,10 +51,9 @@ class EditBookModal extends React.Component {
                             </FormGroup>
                         </Form>
                     </Modal.Body>
-                    <Modal.Footer>
-                        <Button onClick={handleOnClose}>Close</Button>
+                    {/* <Modal.Footer>
                         <Button bsStyle="primary">Update Book</Button>
-                    </Modal.Footer>
+                    </Modal.Footer> */}
                 </Modal.Dialog>
             </div>
 

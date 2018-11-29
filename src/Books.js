@@ -31,6 +31,8 @@ class Books extends React.Component {
         this.handleEditModalClose = this.handleEditModalClose.bind(this);
         this.handleEdit = this.handleEdit.bind(this);
         this.canUpdate = this.canUpdate.bind(this);
+
+        this.handleDelete = this.handleDelete.bind(this);
     }
 
     get_default_books() {
@@ -90,7 +92,18 @@ class Books extends React.Component {
         this.setState({'edit_title': ''});
         this.setState({'edit_author': ''});
         this.setState({'edit_copies': 1});
+    }
 
+    handleDelete(event) {
+        event.preventDefault();
+        const target = event.target;
+        let delete_index, books;
+
+        delete_index = target.index;
+        books = this.state.books;
+
+        books.splice(delete_index, 1);
+        this.setState({books: books});
     }
 
     handleInputChange(event) {
@@ -132,6 +145,7 @@ class Books extends React.Component {
                 author={book.author}
                 copies={book.copies}
                 toggleEdit={this.toggleEdit}
+                handleDelete={this.handleDelete}
                 index={index} />)
         }, this)
         return (
