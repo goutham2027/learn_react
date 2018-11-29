@@ -26,8 +26,11 @@ class Books extends React.Component {
         this.handleNewBook = this.handleNewBook.bind(this);
         this.handleInputChange = this.handleInputChange.bind(this);
         this.canSubmit = this.canSubmit.bind(this);
+
         this.toggleEdit = this.toggleEdit.bind(this);
         this.handleEditModalClose = this.handleEditModalClose.bind(this);
+        this.handleEdit = this.handleEdit.bind(this);
+        this.canUpdate = this.canUpdate.bind(this);
     }
 
     get_default_books() {
@@ -36,12 +39,12 @@ class Books extends React.Component {
             {
                 'title': 'Who will cry when you Die',
                 'author': 'Robin Sharma',
-                'count' : 5
+                'copies' : 5
             },
             {
                 'title': 'Loosing my Virginity',
                 'author': 'Richard Branson',
-                'count' : 5
+                'copies' : 5
             }
         ]
     }
@@ -50,26 +53,44 @@ class Books extends React.Component {
         return this.state.title.length > 0 && this.state.author.length > 0 && this.state.copies > 0
     }
 
+    canUpdate() {
+        return this.state.edit_title.length > 0 && this.state.edit_author.length > 0 && this.state.edit_copies > 0
+    }
+
     handleNewBook(event) {
         event.preventDefault()
         let newBook = {
             'title': this.state.title,
             'author': this.state.author,
-            'count': this.state.copies
+            'copies': this.state.copies
         }
 
         if (this.canSubmit()) {
             this.setState(prevState => ({
                 'books': [...prevState.books, newBook]
             }))
-            this.setState({'title': '', 'author': '', 'count': 1})
+            this.setState({'title': '', 'author': '', 'copies': 1})
         }
     }
 
     handleEdit(event) {
         event.preventDefault();
-        // get event details and load modal
-        // onSave of the modal update the book details
+        let edit_index, books;
+
+        edit_index = this.state.edit_index;
+        books = this.state.books;
+        books[edit_index]['title'] = this.state.edit_title;
+        books[edit_index]['author'] = this.state.edit_author;
+        books[edit_index]['copies'] = parseInt(this.state.edit_copies);
+
+        console.log(books);
+        this.setState({'books': books});
+        this.setState({'edit_index': undefined});
+        this.setState({'showEditModal': false});
+        this.setState({'edit_title': ''});
+        this.setState({'edit_author': ''});
+        this.setState({'edit_copies': 1});
+
     }
 
     handleInputChange(event) {
@@ -88,7 +109,7 @@ class Books extends React.Component {
         this.setState({'edit_index': index})
         this.setState({'edit_title': book['title']});
         this.setState({'edit_author': book['author']});
-        this.setState({'edit_copies': book['count']});
+        this.setState({'edit_copies': book['copies']});
     }
 
     handleEditModalClose(event) {
@@ -109,7 +130,7 @@ class Books extends React.Component {
                 key={index}
                 title={book.title}
                 author={book.author}
-                count={book.count}
+                copies={book.copies}
                 toggleEdit={this.toggleEdit}
                 index={index} />)
         }, this)
@@ -131,7 +152,7 @@ class Books extends React.Component {
                     <tr>
                         <th>Title</th>
                         <th>Author</th>
-                        <th>Avaialable Count</th>
+                        <th>Avaialable Copies</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
@@ -146,7 +167,7 @@ class Books extends React.Component {
              handleOnClose={this.handleEditModalClose}
              handleOnSubmit={this.handleEdit}
              handleInputChange={this.handleInputChange}
-             canSubmit={this.canSubmit}
+             canSubmit={this.canUpdate}
              title={this.state.edit_title}
              author={this.state.edit_author}
              copies={this.state.edit_copies} />

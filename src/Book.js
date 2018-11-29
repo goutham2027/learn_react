@@ -3,9 +3,7 @@ import React from 'react';
 class Book extends React.Component {
     constructor(props) {
         super(props);
-        const count = props.count
         this.state = {
-            count: count,
             borrowed_count: 0
         }
 
@@ -16,7 +14,7 @@ class Book extends React.Component {
     handleBorrow(event) {
         // increment borrowed_count
         // borrowed_count <= count
-        if (this.state.borrowed_count < this.state.count) {
+        if (this.state.borrowed_count < this.props.copies) {
             this.setState((state) => {
                 return { borrowed_count: this.state.borrowed_count + 1 }
             })
@@ -25,7 +23,7 @@ class Book extends React.Component {
 
     canBorrow() {
         // Can borrow only if a book is available.
-        return this.state.borrowed_count < this.state.count;
+        return this.state.borrowed_count < this.props.copies;
     }
 
     canReturn() {
@@ -47,7 +45,7 @@ class Book extends React.Component {
             <tr>
                 <td>{title}</td>
                 <td>{author}</td>
-                <td>{this.state.count - this.state.borrowed_count}</td>
+                <td>{this.props.copies - this.state.borrowed_count}</td>
                 <td>{this.canBorrow() ? (
                     <button className="btn-primary" onClick={this.handleBorrow} isbn={isbn}> Borrow</button>
                 )
@@ -61,6 +59,8 @@ class Book extends React.Component {
                         <p></p>
                     }
                     <button className="btn-primary" index={index} onClick={this.props.toggleEdit}>Edit</button>
+                    <br/>
+                    <button className="btn-primary">Delete</button>
                 </td>
             </tr>
         );
