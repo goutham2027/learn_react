@@ -6,9 +6,12 @@ class EditBookModal extends React.Component {
         super(props);
     }
 
+    isBookInfoValid() {
+        return this.props.isBookInfoValid(this.props.book)
+    }
+
     render() {
-        // const { handleOnSubmit, handleInputChange, canSubmit, author, title, copies } = this.props
-        const { show, handleOnClose, handleOnSubmit, handleInputChange, title, author, copies, canSubmit } = this.props;
+        const { show, handleOnClose, handleOnSubmit, handleInputChange, book, isBookInfoValid } = this.props;
         if (!show) {
             return null;
         }
@@ -24,26 +27,26 @@ class EditBookModal extends React.Component {
                                 <div className="col-xs-12">
                                     <ControlLabel htmlFor="title" className="col-xs-3 text-right">Title</ControlLabel>
                                     <div className="col-xs-3">
-                                        <FormControl type="text" name="edit_title" value={title} onChange={handleInputChange} />
+                                        <FormControl type="text" name="title" value={book.title} onChange={(e) => handleInputChange(this.props.book, e)} />
                                     </div>
                                 </div>
 
                                 <div className="col-xs-12">
                                     <ControlLabel htmlFor="author" className="col-xs-3 text-right">Author</ControlLabel>
                                     <div className="col-xs-3">
-                                        <FormControl type="text" name="edit_author" value={author} onChange={handleInputChange} />
+                                        <FormControl type="text" name="author" value={book.author} onChange={(e) => handleInputChange(this.props.book, e)} />
                                     </div>
                                 </div>
 
                                 <div className="col-xs-12">
                                     <ControlLabel htmlFor="num_of_copies" className="col-xs-3 text-right">Number of copies</ControlLabel>
                                     <div className="col-xs-3">
-                                        <FormControl type="text" name="edit_copies" value={copies} onChange={handleInputChange} />
+                                        <FormControl type="text" name="copies" value={book.copies} onChange={(e) => handleInputChange(this.props.book, e)} />
                                     </div>
                                 </div>
 
                                 <Button onClick={handleOnClose}>Close</Button>
-                                {canSubmit() ?
+                                {this.isBookInfoValid() ?
                                     <Button bsStyle="primary" type="submit">Update Book</Button>
                                     :
                                     <Button bsStyle="primary" type="submit" disabled>Update Book</Button>

@@ -7,36 +7,33 @@ class Books extends React.Component {
 
     constructor(props) {
         super(props);
-        this.state = {
-            // 'books': this.get_all_books(),
-            'books': this.get_default_books(),
-            // 'newBook': {
-            //     'title': '',
-            //     'author': ''
-            // }
-            'title': '',
-            'author': '',
-            'copies': 1,
-            'edit_title': '',
-            'edit_author': '',
-            'edit_copies': 1,
-            'edit_index': undefined,
-            'showEditModal': false
+
+        this.Book = function(title='', author='', copies=1) {
+            this.title = title;
+            this.author = author;
+            this.copies = copies;
         }
+
+        this.state = {
+            books: this.get_default_books(),
+            new_book: new this.Book(),
+            edit_book: new this.Book(),
+            edit_index: undefined,
+            showEditModal: false
+        }
+
         this.handleNewBook = this.handleNewBook.bind(this);
         this.handleInputChange = this.handleInputChange.bind(this);
-        this.canSubmit = this.canSubmit.bind(this);
 
         this.toggleEdit = this.toggleEdit.bind(this);
+        this.handleEditInputChange = this.handleEditInputChange.bind(this);
         this.handleEditModalClose = this.handleEditModalClose.bind(this);
         this.handleEdit = this.handleEdit.bind(this);
-        this.canUpdate = this.canUpdate.bind(this);
 
         this.handleDelete = this.handleDelete.bind(this);
     }
 
     get_default_books() {
-        return []
         return [
             {
                 'title': 'Who will cry when you Die',
@@ -51,47 +48,38 @@ class Books extends React.Component {
         ]
     }
 
-    canSubmit() {
-        return this.state.title.length > 0 && this.state.author.length > 0 && this.state.copies > 0
-    }
-
-    canUpdate() {
-        return this.state.edit_title.length > 0 && this.state.edit_author.length > 0 && this.state.edit_copies > 0
+    isBookInfoValid(book) {
+        return book.title.length > 0 && book.author.length > 0 && book.copies > 0
     }
 
     handleNewBook(event) {
         event.preventDefault()
-        let newBook = {
-            'title': this.state.title,
-            'author': this.state.author,
-            'copies': this.state.copies
-        }
+        let book;
+        book = this.state.new_book;
 
-        if (this.canSubmit()) {
+        if (this.isBookInfoValid(book)) {
             this.setState(prevState => ({
-                'books': [...prevState.books, newBook]
+                'books': [...prevState.books, book]
             }))
-            this.setState({'title': '', 'author': '', 'copies': 1})
         }
+        this.setState({new_book: new this.Book()})
     }
 
     handleEdit(event) {
         event.preventDefault();
-        let edit_index, books;
+        let edit_index, edit_book, books, new_book;
 
         edit_index = this.state.edit_index;
+        edit_book = this.state.edit_book;
         books = this.state.books;
-        books[edit_index]['title'] = this.state.edit_title;
-        books[edit_index]['author'] = this.state.edit_author;
-        books[edit_index]['copies'] = parseInt(this.state.edit_copies);
+        books[edit_index] = edit_book;
 
-        console.log(books);
-        this.setState({'books': books});
-        this.setState({'edit_index': undefined});
-        this.setState({'showEditModal': false});
-        this.setState({'edit_title': ''});
-        this.setState({'edit_author': ''});
-        this.setState({'edit_copies': 1});
+        this.setState({books: books});
+        this.setState({edit_index: undefined});
+        this.setState({showEditModal: false});
+
+        new_book = new this.Book()
+        this.setState({edit_book: new_book});
     }
 
     handleDelete(event) {
@@ -106,34 +94,47 @@ class Books extends React.Component {
         this.setState({books: books});
     }
 
-    handleInputChange(event) {
+    handleInputChange(book, event) {
         const target = event.target;
-        this.setState({[target.name]: target.value});
+        book[target.name] = target.value;
+
+        this.setState({new_book: book});
+    }
+
+    handleEditInputChange(book, event) {
+        const target = event.target;
+        book[target.name] = target.value;
+
+        this.setState({edit_book: book});
     }
 
     toggleEdit(event) {
         event.preventDefault();
-        let book, index;
+        let book, index, edit_book;
+
         index = event.target.getAttribute('index');
-
-        this.setState({'showEditModal': !this.state.showEditModal});
         book = this.state.books[index]
+        edit_book = this.state.edit_book;
 
+        // TODO: Research on how to do deep copy in JS
+        edit_book.title = book.title;
+        edit_book.author = book.author;
+        edit_book.copies = book.copies;
+
+        this.setState({edit_book: edit_book});
+        this.setState({'showEditModal': !this.state.showEditModal});
         this.setState({'edit_index': index})
-        this.setState({'edit_title': book['title']});
-        this.setState({'edit_author': book['author']});
-        this.setState({'edit_copies': book['copies']});
     }
 
     handleEditModalClose(event) {
         event.preventDefault();
-        this.setState({'showEditModal': false})
+        let book;
+        book = new this.Book();
 
-        // reset edit values in state
+        this.setState({'showEditModal': false})
         this.setState({'edit_index': undefined})
-        this.setState({'edit_title': ''});
-        this.setState({'edit_author': ''});
-        this.setState({'edit_copies': ''});
+        // reset edit values in state
+        this.setState({edit_book: book});
     }
 
     render() {
@@ -141,9 +142,7 @@ class Books extends React.Component {
         this.state.books.forEach(function(book, index) {
             books.push(<Book
                 key={index}
-                title={book.title}
-                author={book.author}
-                copies={book.copies}
+                book={book}
                 toggleEdit={this.toggleEdit}
                 handleDelete={this.handleDelete}
                 index={index} />)
@@ -151,11 +150,9 @@ class Books extends React.Component {
         return (
         <div className="col-xs-12">
             <NewBookForm handleOnSubmit={this.handleNewBook}
-            title={this.state.title}
-            author={this.state.author}
-            copies={this.state.copies}
+            book={this.state.new_book}
             handleInputChange={this.handleInputChange}
-            canSubmit={this.canSubmit} />
+            isBookInfoValid={this.isBookInfoValid} />
                 {this.state.books.length > 0 ?
                     <h2 className="text-success"> All Books </h2>
                     :
@@ -180,11 +177,9 @@ class Books extends React.Component {
              show={this.state.showEditModal}
              handleOnClose={this.handleEditModalClose}
              handleOnSubmit={this.handleEdit}
-             handleInputChange={this.handleInputChange}
-             canSubmit={this.canUpdate}
-             title={this.state.edit_title}
-             author={this.state.edit_author}
-             copies={this.state.edit_copies} />
+             handleInputChange={this.handleEditInputChange}
+             isBookInfoValid={this.isBookInfoValid}
+             book={this.state.edit_book} />
             :
             <p></p>
             }

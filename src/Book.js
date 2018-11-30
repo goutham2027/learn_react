@@ -14,7 +14,7 @@ class Book extends React.Component {
     handleBorrow(event) {
         // increment borrowed_count
         // borrowed_count <= count
-        if (this.state.borrowed_count < this.props.copies) {
+        if (this.state.borrowed_count < this.props.book.copies) {
             this.setState((state) => {
                 return { borrowed_count: this.state.borrowed_count + 1 }
             })
@@ -23,7 +23,7 @@ class Book extends React.Component {
 
     canBorrow() {
         // Can borrow only if a book is available.
-        return this.state.borrowed_count < this.props.copies;
+        return this.state.borrowed_count < this.props.book.copies;
     }
 
     canReturn() {
@@ -40,20 +40,20 @@ class Book extends React.Component {
     }
 
     render() {
-        const {title, author, isbn, index} = this.props;
+        const {book, index} = this.props;
         return (
             <tr>
-                <td>{title}</td>
-                <td>{author}</td>
-                <td>{this.props.copies - this.state.borrowed_count}</td>
+                <td>{book.title}</td>
+                <td>{book.author}</td>
+                <td>{book.copies - this.state.borrowed_count}</td>
                 <td>{this.canBorrow() ? (
-                    <button className="btn-primary" onClick={this.handleBorrow} isbn={isbn}> Borrow</button>
+                    <button className="btn-primary" onClick={this.handleBorrow}> Borrow</button>
                 )
                     :
                     <p></p>
                 }
                     {this.canReturn() ? (
-                        <button className="btn-primary" onClick={this.handleReturn} isbn={isbn}> Return </button>
+                        <button className="btn-primary" onClick={this.handleReturn} > Return </button>
                     )
                         :
                         <p></p>
