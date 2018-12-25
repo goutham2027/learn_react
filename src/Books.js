@@ -153,25 +153,28 @@ class Books extends React.Component {
             book={this.state.new_book}
             handleInputChange={this.handleInputChange}
             isBookInfoValid={this.isBookInfoValid} />
-                {this.state.books.length > 0 ?
-                    <h2 className="text-success"> All Books </h2>
-                    :
-                    <h2 className="text-danger"> No Books present.</h2>
-                }
-            <table className="table table-bordered table-striped">
-                <thead className="thead-dark">
-                    <tr>
-                        <th>Title</th>
-                        <th>Author</th>
-                        <th>Avaialable Copies</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
+                {this.state.books.length > 0 ? (
+                    <div>
+                        <h2 className="text-success"> All Books </h2>
+                        <table className="table table-bordered table-striped">
+                            <thead className="thead-dark">
+                                <tr>
+                                    <th>Title</th>
+                                    <th>Author</th>
+                                    <th>Avaialable Copies</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
 
-                <tbody>
-                    {books}
-                </tbody>
-            </table>
+                            <tbody>
+                                {books}
+                            </tbody>
+                        </table>
+                    </div>
+                ) : (
+                    <h2 className="text-danger"> No Books present.</h2>
+                )}
+
             {this.state.showEditModal ?
             <EditBookModal
              show={this.state.showEditModal}
